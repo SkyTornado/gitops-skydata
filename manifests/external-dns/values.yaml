@@ -1,6 +1,12 @@
-provider: google
+domainFilters:
+  - skydata.space
 google:
   project: skydata-379820
+logLevel: debug
+policy: sync
+provider: google
+rbac:
+  create: true
 serviceAccount:
   annotations:
     iam.gke.io/gcp-service-account: external-dns-stage-skydata-gke@skydata-379820.iam.gserviceaccount.com
