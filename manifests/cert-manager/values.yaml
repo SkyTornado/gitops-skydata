@@ -1,0 +1,6 @@
+crds:
+  enabled: true
+installCRDs: false
+serviceAccount:
+  annotations:
+    iam.gke.io/gcp-service-account: cert-manager-stage-skydata-gke@skydata-379820.iam.gserviceaccount.com
