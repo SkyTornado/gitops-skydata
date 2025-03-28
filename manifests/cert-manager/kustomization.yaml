@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: cert-manager
+resources:
+  - https://github.com/jetstack/cert-manager/releases/download/v1.15.1/cert-manager.yaml
+patches:
+  - patch: |-
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: cert-manager
+        namespace: cert-manager
+        annotations:
+          iam.gke.io/gcp-service-account: cert-manager-stage-skydata-gke@skydata-379820.iam.gserviceaccount.com
+    target:
+      kind: ServiceAccount
+      name: cert-manager
