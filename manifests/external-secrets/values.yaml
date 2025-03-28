@@ -1,0 +1,3 @@
+serviceAccount:
+  annotations:
+    iam.gke.io/gcp-service-account: external-secrets-stage-skydata@skydata-379820.iam.gserviceaccount.com

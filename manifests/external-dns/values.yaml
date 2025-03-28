@@ -1,0 +1,6 @@
+provider: google
+google:
+  project: skydata-379820
+serviceAccount:
+  annotations:
+    iam.gke.io/gcp-service-account: external-dns-stage-skydata-gke@skydata-379820.iam.gserviceaccount.com
