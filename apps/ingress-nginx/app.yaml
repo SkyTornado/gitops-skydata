@@ -3,12 +3,18 @@ kind: Application
 metadata:
   name: ingress-nginx
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
 spec:
   project: default
   source:
     repoURL: https://github.com/SkyTornado/gitops-skydata.git
     targetRevision: main
     path: manifests/ingress-nginx
+    helm:
+      releaseName: ingress-nginx
+      valuesFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
