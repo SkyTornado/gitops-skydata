@@ -8,13 +8,13 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/SkyTornado/gitops-skydata.git
-    targetRevision: main
-    path: manifests/ingress-nginx
+    repoURL: https://kubernetes.github.io/ingress-nginx  # Удалённый репозиторий Helm
+    targetRevision: 4.12.1                       # Версия чарта
+    chart: ingress-nginx                         # Название чарта
     helm:
       releaseName: ingress-nginx
       valuesFiles:
-        - values.yaml
+        - https://github.com/SkyTornado/gitops-skydata.git/raw/main/manifests/ingress-nginx/values.yaml  # Полный путь к values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
