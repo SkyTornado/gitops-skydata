@@ -9,15 +9,16 @@ spec:
   project: default
   source:
     repoURL: https://kubernetes-sigs.github.io/external-dns/
-    targetRevision: 1.16.0  # Обновляем до последней версии
+    targetRevision: 1.16.0
     chart: external-dns
     helm:
       releaseName: external-dns
       values: |
-        provider: google
+        provider:
+          name: google
         google:
-          project: skydata-379820  # Твой GCP проект
-          serviceAccountSecret: external-dns-sa  # Имя секрета
+          project: skydata-379820
+          serviceAccountSecret: external-dns-sa
         domainFilters:
           - skydata.space
         logLevel: info
