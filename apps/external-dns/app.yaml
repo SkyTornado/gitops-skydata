@@ -20,7 +20,7 @@ spec:
           project: skydata-379820
           serviceAccountSecret: external-dns-sa
         domainFilters:
-          - skydata.space
+          - skydata
         logLevel: info
   destination:
     server: https://kubernetes.default.svc
