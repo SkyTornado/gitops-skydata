@@ -3,16 +3,30 @@ kind: Application
 metadata:
   name: external-dns
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"  # До ingress-nginx, но после cert-manager
 spec:
   project: default
   source:
-    repoURL: https://github.com/SkyTornado/gitops-skydata.git
-    targetRevision: main
-    path: manifests/external-dns
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.14.6  # Последняя стабильная версия на момент марта 2025
+    chart: external-dns
+    helm:
+      releaseName: external-dns
+      values: |
+        provider: google
+        google:
+          project: skydata-379820  
+          serviceAccountSecret: external-dns-stage-skydata-gke@skydata-379820.iam.gserviceaccount.com
+        domainFilters:
+          - skydata.space  # Ограничиваем зону DNS
+        logLevel: info
   destination:
     server: https://kubernetes.default.svc
-    namespace: kube-system
+    namespace: external-dns  # Отдельный namespace
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true  # Создаём namespace автоматически
