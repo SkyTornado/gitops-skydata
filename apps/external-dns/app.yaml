@@ -8,17 +8,18 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://kubernetes-sigs.github.io/external-dns/
-    targetRevision: 1.16.0
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 8.7.8  # Последняя версия Bitnami
     chart: external-dns
     helm:
       releaseName: external-dns
       values: |
-        provider:
-          name: google
+        provider: google
         google:
           project: skydata-379820
-          serviceAccountSecret: external-dns-sa
+          serviceAccountKeySecretRef:
+            name: external-dns-sa
+            key: credentials.json
         domainFilters:
           - skydata.space
         logLevel: info
