@@ -8,3 +8,5 @@ helmCharts:
     releaseName: argocd
     namespace: argocd
     valuesFile: values.yaml
+resources:
+  - cert.yaml
