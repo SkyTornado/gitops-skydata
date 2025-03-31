@@ -1,5 +1,10 @@
 controller:
   service:
-    annotations:
-      service.beta.kubernetes.io/google-load-balancer-type: Internal
+    type: LoadBalancer  # Явно указываем тип
     externalTrafficPolicy: Local
+    # Убираем аннотацию Internal, чтобы получить внешний IP
+  ingressClassResource:
+    name: nginx  # Соответствует ingressClassName в argocd
+    default: true  # Делаем этот класс дефолтным
+  publishService:
+    enabled: true  # Для передачи IP в Ingress
