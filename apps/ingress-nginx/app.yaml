@@ -8,13 +8,21 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://kubernetes.github.io/ingress-nginx  # Удалённый репозиторий Helm
-    targetRevision: 4.12.1                       # Версия чарта
-    chart: ingress-nginx                         # Название чарта
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    targetRevision: 4.12.1
+    chart: ingress-nginx
     helm:
       releaseName: ingress-nginx
-      valuesFiles:
-        - https://github.com/SkyTornado/gitops-skydata.git/raw/main/manifests/ingress-nginx/values.yaml  # Полный путь к values.yaml
+      values: |
+        controller:
+          service:
+            type: LoadBalancer
+            externalTrafficPolicy: Local
+          ingressClassResource:
+            name: nginx
+            default: true
+          publishService:
+            enabled: true
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
