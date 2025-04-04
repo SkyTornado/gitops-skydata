@@ -9,6 +9,8 @@ spec:
     repoURL: https://github.com/SkyTornado/gitops-skydata.git
     targetRevision: main
     path: manifests/argocd
+    kustomize:
+      helm: true  # Включаем поддержку Helm в Kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
@@ -16,3 +18,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true  # На случай, если namespace ещё не создан
