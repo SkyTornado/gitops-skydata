@@ -5,12 +5,17 @@ metadata:
   namespace: argocd
 spec:
   project: default
-  source:
-    repoURL: https://github.com/SkyTornado/gitops-skydata.git
-    targetRevision: main
-    path: manifests/argocd
-    kustomize:
-      helm: true  # Включаем поддержку Helm в Kustomize
+  sources:
+    - repoURL: https://argoproj.github.io/argo-helm
+      targetRevision: 7.8.14
+      chart: argo-cd
+      helm:
+        releaseName: argocd
+        valueFiles:
+          - $values/manifests/argocd/values.yaml  # Ссылка на второй source
+    - repoURL: https://github.com/SkyTornado/gitops-skydata.git
+      targetRevision: main
+      ref: values  # Псевдоним для ссылки в valueFiles
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
@@ -19,4 +24,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true  # На случай, если namespace ещё не создан
+      - CreateNamespace=true
