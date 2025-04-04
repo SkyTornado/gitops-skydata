@@ -3,19 +3,16 @@ kind: Application
 metadata:
   name: argocd
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   project: default
-  sources:
-    - repoURL: https://argoproj.github.io/argo-helm
-      targetRevision: 7.8.14
-      chart: argo-cd
-      helm:
-        releaseName: argocd
-        valueFiles:
-          - $values/manifests/argocd/values.yaml  # Ссылка на второй source
-    - repoURL: https://github.com/SkyTornado/gitops-skydata.git
-      targetRevision: main
-      ref: values  # Псевдоним для ссылки в valueFiles
+  source:
+    repoURL: https://github.com/SkyTornado/gitops-skydata.git
+    targetRevision: main
+    path: manifests/argocd
+    kustomize:
+      helmChartsEnabled: true  # Включаем Helm в Kustomize
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
