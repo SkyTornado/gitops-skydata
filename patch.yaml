@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argocd-application-controller
+  namespace: argocd
+spec:
+  template:
+    spec:
+      containers:
+      - name: argocd-application-controller
+        args:
+          - --enable-helm
+          # Если там уже есть другие аргументы, убедитесь, что флаг добавлен в нужное место.
