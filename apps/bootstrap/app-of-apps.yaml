@@ -36,7 +36,7 @@ spec:
     path: apps/external-dns
   destination:
     server: https://kubernetes.default.svc
-    namespace: external-dns  # Уточняем namespace
+    namespace: external-dns
   syncPolicy:
     automated:
       prune: true
@@ -57,7 +57,7 @@ spec:
     path: apps/external-secrets
   destination:
     server: https://kubernetes.default.svc
-    namespace: external-secrets  # Уточняем namespace
+    namespace: external-secrets
   syncPolicy:
     automated:
       prune: true
@@ -73,16 +73,52 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/SkyTornado/gitops-skydata.git
-    targetRevision: main
-    path: apps/cert-manager
+    repoURL: https://charts.jetstack.io
+    targetRevision: 1.15.1
+    chart: cert-manager
+    helm:
+      releaseName: cert-manager
+      values: |
+        crds:
+          enabled: true
+        installCRDs: false
+        serviceAccount:
+          annotations:
+            iam.gke.io/gcp-service-account: cert-manager-stage-skydata-gke@skydata-379820.iam.gserviceaccount.com
   destination:
     server: https://kubernetes.default.svc
-    namespace: cert-manager  # Уточняем namespace
+    namespace: cert-manager
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager-clusterissuer
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/SkyTornado/gitops-skydata.git
+    targetRevision: main
+    path: manifests/cert-manager
+    kustomize:
+      namePrefix: cert-manager-
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -90,7 +126,7 @@ metadata:
   name: ingress-nginx
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   project: default
   source:
@@ -111,13 +147,34 @@ metadata:
   name: argocd
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "6"
 spec:
   project: default
   source:
-    repoURL: https://github.com/SkyTornado/gitops-skydata.git
-    targetRevision: main
-    path: manifests/argocd
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: 7.8.14
+    chart: argo-cd
+    helm:
+      releaseName: argocd
+      values: |
+        server:
+          ingress:
+            enabled: true
+            ingressClassName: nginx
+            hostname: argo.skydata.space
+            annotations:
+              external-dns.alpha.kubernetes.io/hostname: argo.skydata.space
+              nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+              nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+            hosts:
+              - argo.skydata.space
+            tls:
+              - hosts:
+                  - argo.skydata.space
+                secretName: argocd-server-tls
+          configs:
+            params:
+              server.insecure: false
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
@@ -125,3 +182,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
