@@ -244,3 +244,4 @@ You now have a full GitOps stack in GKE with automated DNS, secrets, TLS, and Ar
 
 ## License
 GNU GPL v3
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
