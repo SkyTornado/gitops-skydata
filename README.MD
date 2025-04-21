@@ -1,3 +1,4 @@
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 # Kubernetes GitOps Stack Setup
 
 This README describes how to manually install and configure the following components in a GKE cluster with Workload Identity:
@@ -242,4 +243,4 @@ You now have a full GitOps stack in GKE with automated DNS, secrets, TLS, and Ar
 
 ## License
 GNU GPL v3
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
