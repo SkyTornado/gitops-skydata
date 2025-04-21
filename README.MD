@@ -241,3 +241,6 @@ kubectl describe certificate argocd-server-tls -n argocd
 3. **Set up AppProject & Applications** in Argo CD for your GitOps workflow.
 
 You now have a full GitOps stack in GKE with automated DNS, secrets, TLS, and Argo CD!
+
+## License
+GNU GPL v3
