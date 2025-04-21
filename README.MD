@@ -1,5 +1,3 @@
-Thought for a couple of seconds
-
 # Kubernetes GitOps Stack Setup
 
 This README describes how to manually install and configure the following components in a GKE cluster with Workload Identity:
