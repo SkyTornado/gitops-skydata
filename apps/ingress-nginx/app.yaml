@@ -1,22 +1,22 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ingress-nginx
+  name: bootstrap
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "4"
+    argocd.argoproj.io/sync-wave: "0"
 spec:
-  project: skydata
+  project: default
   source:
     repoURL: https://github.com/SkyTornado/gitops-skydata.git
     targetRevision: main
-    path: manifests/ingress-nginx
+    path: apps
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
-    namespace: ingress-nginx
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true

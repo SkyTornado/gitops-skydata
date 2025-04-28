@@ -1,7 +1,23 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: ingress-nginx
+
+# создаём namespace ingress-nginx
 resources:
-  - deployment.yaml
-  - service.yaml
-  - ingressclass.yaml
+  - namespace.yaml
+
+# подтягиваем Helm-чарт ingress-nginx
+helmCharts:
+  - name: ingress-nginx
+    repo: https://kubernetes.github.io/ingress-nginx
+    version: 4.11.2               # можно зафиксировать вашу версию
+    releaseName: ingress-nginx
+    namespace: ingress-nginx
+    values:
+      controller:
+        service:
+          type: LoadBalancer
+          annotations:
+            external-dns.alpha.kubernetes.io/hostname: skydata.space
+        ingressClassResource:
+          name: nginx
+          controllerValue: k8s.io/ingress-nginx
