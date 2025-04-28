@@ -6,23 +6,11 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "4"
 spec:
-  project: default
+  project: skydata
   source:
-    repoURL: https://kubernetes.github.io/ingress-nginx
-    targetRevision: 4.12.1
-    chart: ingress-nginx
-    helm:
-      releaseName: ingress-nginx
-      values: |
-        controller:
-          service:
-            type: LoadBalancer
-            externalTrafficPolicy: Local
-          ingressClassResource:
-            name: nginx
-            default: true
-          publishService:
-            enabled: true
+    repoURL: https://github.com/SkyTornado/gitops-skydata.git
+    targetRevision: main
+    path: manifests/ingress-nginx
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
@@ -31,4 +19,4 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
-      - CreateNamespace=true  # Заставляем ArgoCD создавать namespace
+      - CreateNamespace=true
